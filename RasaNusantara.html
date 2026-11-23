@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rasa Nusantara - Jelajah Kuliner Indonesia</title>
+  <meta name="description" content="Jelajahi ragam kuliner khas Indonesia dari Sabang sampai Merauke.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --utama: #1f7a4d;
+      --utama-tua: #14573a;
+      --oranye: #f28c28;
+      --kuning: #fbbf3c;
+      --krem: #fff6e6;
+      --krem-tua: #fde9c4;
+      --coklat: #2e1a12;
+      --coklat-muda: #6b4a3a;
+      --putih: #ffffff;
+      --bayangan: 0 10px 30px rgba(46, 26, 18, .12);
+      --radius: 18px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--krem);
+      color: var(--coklat);
+      line-height: 1.7;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    .wadah { width: min(1160px, 92%); margin: 0 auto; }
+
+    h1, h2, h3 { font-family: 'Playfair Display', serif; line-height: 1.2; }
+
+    /* ---------- NAVBAR ---------- */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      padding: 18px 0;
+      transition: background .3s, padding .3s, box-shadow .3s;
+    }
+    .navbar.scrolled {
+      background: rgba(46, 26, 18, .95);
+      padding: 10px 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+    }
+    .navbar .wadah {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--putih);
+    }
+    .logo span { color: var(--kuning); }
+
+    .menu-nav { display: flex; gap: 30px; }
+    .menu-nav a {
+      color: var(--putih);
+      font-weight: 500;
+      font-size: .95rem;
+      position: relative;
+      padding: 4px 0;
+    }
+    .menu-nav a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 0; height: 2px;
+      background: var(--kuning);
+      transition: width .3s;
+    }
+    .menu-nav a:hover::after { width: 100%; }
+
+    .tombol-burger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 32px; height: 24px;
+      position: relative;
+    }
+    .tombol-burger span {
+      position: absolute;
+      left: 0; width: 100%; height: 3px;
+      background: var(--putih);
+      border-radius: 3px;
+      transition: .3s;
+    }
+    .tombol-burger span:nth-child(1) { top: 0; }
+    .tombol-burger span:nth-child(2) { top: 10px; }
+    .tombol-burger span:nth-child(3) { top: 20px; }
+    .tombol-burger.buka span:nth-child(1) { top: 10px; transform: rotate(45deg); }
+    .tombol-burger.buka span:nth-child(2) { opacity: 0; }
+    .tombol-burger.buka span:nth-child(3) { top: 10px; transform: rotate(-45deg); }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      color: var(--putih);
+      background:
+        linear-gradient(110deg, rgba(46,26,18,.88) 20%, rgba(20,87,58,.6) 100%),
+        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat,
+        var(--coklat);
+    }
+    .hero-isi { max-width: 640px; padding-top: 60px; }
+    .hero-label {
+      display: inline-block;
+      background: var(--kuning);
+      color: var(--coklat);
+      font-weight: 600;
+      font-size: .8rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 22px;
+    }
+    .hero h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); margin-bottom: 20px; }
+    .hero h1 em { color: var(--kuning); font-style: normal; }
+    .hero p { font-size: 1.05rem; opacity: .92; margin-bottom: 34px; }
+
+    .tombol {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: .95rem;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .25s, box-shadow .25s, background .25s;
+      font-family: inherit;
+    }
+    .tombol-utama { background: var(--oranye); color: var(--putih); }
+    .tombol-utama:hover {
+      background: var(--kuning);
+      color: var(--coklat);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(0,0,0,.3);
+    }
+    .tombol-garis { border-color: var(--putih); color: var(--putih); margin-left: 12px; }
+    .tombol-garis:hover { background: var(--putih); color: var(--utama); }
+
+    .hero-gelombang {
+      position: absolute;
+      bottom: -1px; left: 0;
+      width: 100%; line-height: 0;
+    }
+
+    /* ---------- STATISTIK ---------- */
+    .statistik {
+      margin-top: -50px;
+      position: relative;
+      z-index: 5;
+    }
+    .statistik-kotak {
+      background: var(--putih);
+      border-radius: var(--radius);
+      box-shadow: var(--bayangan);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .statistik-kotak div + div { border-left: 1px dashed var(--krem-tua); }
+    .statistik-kotak strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--utama);
+    }
+    .statistik-kotak span { font-size: .88rem; color: var(--coklat-muda); }
+
+    /* ---------- SECTION UMUM ---------- */
+    section { padding: 90px 0; }
+
+    .judul-section { text-align: center; max-width: 620px; margin: 0 auto 50px; }
+    .judul-section small {
+      color: var(--oranye);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+    .judul-section h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); margin: 8px 0 14px; }
+    .judul-section p { color: var(--coklat-muda); }
+
+    /* ---------- FILTER ---------- */
+    .alat-cari {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 34px;
+    }
+    .filter { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip {
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: var(--putih);
+      border: 1.5px solid var(--krem-tua);
+      font-family: inherit;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--coklat);
+      cursor: pointer;
+      transition: .25s;
+    }
+    .chip:hover { border-color: var(--oranye); color: var(--utama); }
+    .chip.aktif { background: var(--utama); border-color: var(--utama); color: var(--putih); }
+
+    .kolom-cari { position: relative; }
+    .kolom-cari input {
+      padding: 11px 20px 11px 44px;
+      border-radius: 50px;
+      border: 1.5px solid var(--krem-tua);
+      font-family: inherit;
+      font-size: .9rem;
+      width: 260px;
+      background: var(--putih);
+      outline: none;
+      transition: border .25s, box-shadow .25s;
+    }
+    .kolom-cari input:focus {
+      border-color: var(--oranye);
+      box-shadow: 0 0 0 4px rgba(242,140,40,.18);
+    }
+    .kolom-cari::before {
+      content: '🔍';
+      position: absolute;
+      left: 16px; top: 50%;
+      transform: translateY(-50%);
+      font-size: .9rem;
+    }
+
+    /* ---------- KARTU MAKANAN ---------- */
+    .grid-makanan {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 28px;
+    }
+    .kartu {
+      background: var(--putih);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--bayangan);
+      cursor: pointer;
+      transition: transform .3s, box-shadow .3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .kartu:hover { transform: translateY(-8px); box-shadow: 0 18px 40px rgba(31,122,77,.25); }
+
+    .kartu-gambar { position: relative; height: 200px; overflow: hidden; background: var(--krem-tua); }
+    .kartu-gambar img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .5s;
+    }
+    .kartu:hover .kartu-gambar img { transform: scale(1.1); }
+
+    .gambar-cadangan {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(110deg, #ecdcc0 30%, #f7ead2 50%, #ecdcc0 70%);
+      background-size: 200% 100%;
+      animation: kilau 1.4s linear infinite;
+      color: var(--coklat-muda);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      text-align: center;
+      padding: 0 16px;
+    }
+    .gambar-cadangan.selesai {
+      animation: none;
+      background: linear-gradient(135deg, var(--utama), var(--utama-tua));
+      color: var(--putih);
+    }
+    @keyframes kilau { to { background-position: -200% 0; } }
+
+    .label-daerah {
+      position: absolute;
+      top: 14px; left: 14px;
+      background: rgba(46,26,18,.8);
+      color: var(--putih);
+      font-size: .72rem;
+      padding: 4px 12px;
+      border-radius: 50px;
+      backdrop-filter: blur(4px);
+    }
+    .tombol-suka {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: var(--putih);
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,.2);
+      transition: transform .2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tombol-suka:hover { transform: scale(1.15); }
+    .tombol-suka.suka { animation: denyut .35s; }
+
+    @keyframes denyut {
+      50% { transform: scale(1.35); }
+    }
+
+    .kartu-isi { padding: 20px 22px 24px; flex: 1; display: flex; flex-direction: column; }
+    .kartu-isi h3 { font-size: 1.3rem; margin-bottom: 6px; }
+    .kartu-isi p { font-size: .88rem; color: var(--coklat-muda); flex: 1; }
+    .kartu-bawah {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .85rem;
+    }
+    .harga { font-weight: 600; color: var(--utama); }
+    .pedas { letter-spacing: 1px; }
+
+    .kosong {
+      text-align: center;
+      padding: 50px 0;
+      color: var(--coklat-muda);
+      display: none;
+    }
+
+    /* ---------- DAERAH ---------- */
+    .daerah { background: var(--coklat); color: var(--putih); position: relative; }
+    .daerah .judul-section p { color: rgba(255,255,255,.7); }
+    .grid-daerah {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 22px;
+    }
+    .kotak-daerah {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius);
+      padding: 30px 24px;
+      transition: .3s;
+    }
+    .kotak-daerah:hover {
+      background: var(--utama);
+      transform: translateY(-6px);
+    }
+    .kotak-daerah .ikon { font-size: 2.2rem; margin-bottom: 10px; }
+    .kotak-daerah h3 { font-size: 1.2rem; margin-bottom: 8px; color: var(--kuning); }
+    .kotak-daerah:hover h3 { color: var(--putih); }
+    .kotak-daerah p { font-size: .87rem; opacity: .8; }
+
+    /* ---------- TESTIMONI ---------- */
+    .grid-testi {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 26px;
+    }
+    .testi {
+      background: var(--putih);
+      padding: 30px 28px;
+      border-radius: var(--radius);
+      box-shadow: var(--bayangan);
+      border-top: 5px solid var(--oranye);
+    }
+    .testi p { font-style: italic; color: var(--coklat-muda); margin-bottom: 18px; font-size: .92rem; }
+    .testi .orang { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--utama);
+      color: var(--putih);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 600;
+    }
+    .testi strong { display: block; font-size: .92rem; }
+    .testi small { color: var(--coklat-muda); }
+
+    /* ---------- NEWSLETTER ---------- */
+    .langganan {
+      background: linear-gradient(120deg, var(--utama), var(--utama-tua));
+      color: var(--putih);
+      text-align: center;
+      padding: 70px 0;
+    }
+    .langganan h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin-bottom: 10px; }
+    .langganan p { opacity: .92; margin-bottom: 26px; }
+    .form-langganan {
+      display: flex;
+      gap: 10px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .form-langganan input {
+      flex: 1;
+      padding: 14px 22px;
+      border-radius: 50px;
+      border: none;
+      font-family: inherit;
+      outline: none;
+      font-size: .92rem;
+    }
+    .form-langganan button {
+      background: var(--coklat);
+      color: var(--putih);
+      border: none;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .25s;
+    }
+    .form-langganan button:hover { background: var(--putih); color: var(--utama); }
+    .pesan-langganan { margin-top: 14px; font-weight: 500; min-height: 24px; }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      background: var(--coklat);
+      color: rgba(255,255,255,.75);
+      padding: 60px 0 24px;
+      font-size: .9rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    footer h4 { color: var(--kuning); margin-bottom: 14px; font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+    footer li { margin-bottom: 8px; }
+    footer li a:hover { color: var(--kuning); }
+    .footer-bawah {
+      border-top: 1px solid rgba(255,255,255,.12);
+      padding-top: 20px;
+      text-align: center;
+      font-size: .82rem;
+    }
+
+    /* ---------- MODAL ---------- */
+    .modal {
+      position: fixed; inset: 0;
+      background: rgba(20,10,6,.75);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .modal.tampil { display: flex; animation: muncul .3s; }
+    @keyframes muncul { from { opacity: 0; } }
+
+    .modal-kotak {
+      background: var(--putih);
+      border-radius: 22px;
+      max-width: 780px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      animation: naik .35s;
+    }
+    @keyframes naik { from { transform: translateY(40px); opacity: 0; } }
+
+    .modal-gambar { min-height: 320px; background: var(--krem-tua); position: relative; }
+    .modal-gambar img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-isi { padding: 36px 32px; }
+    .modal-isi h3 { font-size: 1.8rem; margin: 6px 0 12px; color: var(--utama); }
+    .modal-isi .daerah-modal {
+      font-size: .78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--oranye);
+    }
+    .modal-isi p { font-size: .92rem; color: var(--coklat-muda); margin-bottom: 18px; }
+    .modal-info { font-size: .88rem; }
+    .modal-info li {
+      display: flex; justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px dashed var(--krem-tua);
+    }
+    .modal-info li span:first-child { color: var(--coklat-muda); }
+    .modal-info li span:last-child { font-weight: 600; text-align: right; }
+
+    .tutup-modal {
+      position: absolute; top: 14px; right: 14px;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: var(--putih);
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,.25);
+      z-index: 2;
+    }
+    .tutup-modal:hover { background: var(--utama); color: var(--putih); }
+
+    .foto { position: absolute; inset: 0; }
+    .kotak-daerah { cursor: pointer; }
+
+    /* ---------- LAIN-LAIN ---------- */
+    .ke-atas {
+      position: fixed;
+      right: 24px; bottom: 24px;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: var(--utama);
+      color: var(--putih);
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,.3);
+      opacity: 0; visibility: hidden;
+      transition: .3s;
+      z-index: 40;
+    }
+    .ke-atas.tampil { opacity: 1; visibility: visible; }
+    .ke-atas:hover { background: var(--oranye); transform: translateY(-4px); }
+
+    .muncul { opacity: 0; transform: translateY(35px); transition: opacity .7s, transform .7s; }
+    .muncul.terlihat { opacity: 1; transform: none; }
+
+    /* ---------- RESPONSIF ---------- */
+    @media (max-width: 860px) {
+      .tombol-burger { display: block; }
+      .menu-nav {
+        position: fixed;
+        top: 0; right: -100%;
+        width: 70%; height: 100vh;
+        background: var(--coklat);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 28px;
+        transition: right .4s;
+      }
+      .menu-nav.buka { right: 0; }
+      .menu-nav a { font-size: 1.15rem; }
+      .tombol-burger { z-index: 60; }
+
+      .statistik-kotak { grid-template-columns: repeat(2, 1fr); gap: 20px 0; }
+      .statistik-kotak div:nth-child(3) { border-left: none; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .modal-kotak { grid-template-columns: 1fr; }
+      .modal-gambar { min-height: 220px; max-height: 240px; }
+      .kolom-cari, .kolom-cari input { width: 100%; }
+      .tombol-garis { margin-left: 0; margin-top: 12px; }
+    }
+
+    @media (max-width: 480px) {
+      section { padding: 64px 0; }
+      .form-langganan { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar">
+    <div class="wadah">
+      <a href="#beranda" class="logo">Rasa<span>Nusantara</span></a>
+      <nav class="menu-nav" id="menuNav">
+        <a href="#beranda">Beranda</a>
+        <a href="#kuliner">Kuliner</a>
+        <a href="#daerah">Pulau</a>
+        <a href="#testimoni">Ulasan</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+      <button class="tombol-burger" id="burger" aria-label="Buka menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="beranda">
+    <div class="wadah">
+      <div class="hero-isi">
+        <span class="hero-label">Cita Rasa Sabang sampai Merauke</span>
+        <h1>Jelajahi <em>Kelezatan</em> Kuliner Indonesia</h1>
+        <p>Dari rendang yang kaya rempah, sate yang harum asapnya, sampai es cendol yang menyegarkan. Temukan makanan khas dari setiap penjuru Nusantara.</p>
+        <a href="#kuliner" class="tombol tombol-utama">Lihat Menu</a>
+        <a href="#daerah" class="tombol tombol-garis">Kuliner per Pulau</a>
+      </div>
+    </div>
+    <svg class="hero-gelombang" viewBox="0 0 1440 90" preserveAspectRatio="none" height="90">
+      <path fill="#fff6e6" d="M0,50 C240,100 480,0 720,40 C960,80 1200,20 1440,60 L1440,90 L0,90 Z"/>
+    </svg>
+  </section>
+
+  <!-- STATISTIK -->
+  <div class="statistik">
+    <div class="wadah">
+      <div class="statistik-kotak">
+        <div><strong data-target="38">0</strong><span>Provinsi</span></div>
+        <div><strong data-target="5300">0</strong><span>Resep Tradisional</span></div>
+        <div><strong data-target="300">0</strong><span>Suku Bangsa</span></div>
+        <div><strong data-target="100">0</strong><span>% Bikin Nagih</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KULINER -->
+  <section id="kuliner">
+    <div class="wadah">
+      <div class="judul-section muncul">
+        <small>Menu Favorit</small>
+        <h2>Hidangan Khas Nusantara</h2>
+        <p>30 hidangan dari 6 wilayah kepulauan. Klik kartu untuk detail, tekan hati untuk menyimpan favorit.</p>
+      </div>
+
+      <div class="alat-cari muncul">
+        <div class="filter" id="filter"></div>
+        <div class="kolom-cari">
+          <input type="text" id="cari" placeholder="Cari makanan...">
+        </div>
+      </div>
+
+      <div class="grid-makanan" id="gridMakanan"></div>
+      <p class="kosong" id="kosong">Yah, makanan yang kamu cari belum ada 😅</p>
+    </div>
+  </section>
+
+  <!-- DAERAH -->
+  <section class="daerah" id="daerah">
+    <div class="wadah">
+      <div class="judul-section muncul">
+        <small style="color: var(--kuning)">Peta Rasa</small>
+        <h2>Ciri Khas Tiap Pulau</h2>
+        <p>Setiap pulau punya karakter rasa sendiri, ada yang pedas menggigit, ada juga yang manis legit.</p>
+      </div>
+      <div class="grid-daerah">
+        <div class="kotak-daerah muncul" data-pulau="Sumatera">
+          <div class="ikon">🌶️</div>
+          <h3>Sumatera</h3>
+          <p>Kaya santan dan bumbu pedas. Rendang, mie aceh, dan pempek jadi andalan.</p>
+        </div>
+        <div class="kotak-daerah muncul" data-pulau="Jawa">
+          <div class="ikon">🍛</div>
+          <h3>Jawa</h3>
+          <p>Perpaduan gurih dan manis. Gudeg, rawon, soto, dan nasi liwet ada di sini.</p>
+        </div>
+        <div class="kotak-daerah muncul" data-pulau="Bali & Nusa Tenggara">
+          <div class="ikon">🥥</div>
+          <h3>Bali & Nusa Tenggara</h3>
+          <p>Bumbu genep yang kuat, kelapa, dan sambal matah yang segar.</p>
+        </div>
+        <div class="kotak-daerah muncul" data-pulau="Kalimantan">
+          <div class="ikon">🐟</div>
+          <h3>Kalimantan</h3>
+          <p>Ikan sungai, olahan ketupat, dan soto dengan kuah rempah yang harum.</p>
+        </div>
+        <div class="kotak-daerah muncul" data-pulau="Sulawesi">
+          <div class="ikon">🍖</div>
+          <h3>Sulawesi</h3>
+          <p>Sup daging berkuah pekat, ikan bakar, dan jajanan pantai yang menggoda.</p>
+        </div>
+        <div class="kotak-daerah muncul" data-pulau="Maluku & Papua">
+          <div class="ikon">🌴</div>
+          <h3>Maluku & Papua</h3>
+          <p>Sagu jadi makanan pokok, berpadu ikan segar dan rempah dari timur.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONI -->
+  <section id="testimoni">
+    <div class="wadah">
+      <div class="judul-section muncul">
+        <small>Kata Mereka</small>
+        <h2>Cerita Para Pencinta Kuliner</h2>
+      </div>
+      <div class="grid-testi">
+        <div class="testi muncul">
+          <p>"Gara-gara baca website ini, akhirnya saya coba bikin rendang sendiri di rumah. Hasilnya bikin keluarga nambah terus!"</p>
+          <div class="orang"><div class="avatar">A</div><div><strong>Ayu Lestari</strong><small>Ibu Rumah Tangga</small></div></div>
+        </div>
+        <div class="testi muncul">
+          <p>"Referensinya lengkap banget. Pas liburan ke Palembang jadi tahu pempek mana yang wajib dicoba."</p>
+          <div class="orang"><div class="avatar">R</div><div><strong>Rizky Pratama</strong><small>Traveler</small></div></div>
+        </div>
+        <div class="testi muncul">
+          <p>"Tampilannya enak dilihat, jadi laper terus kalau lagi scroll. Bahaya buat yang lagi diet!"</p>
+          <div class="orang"><div class="avatar">D</div><div><strong>Dewi Anggraini</strong><small>Food Blogger</small></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LANGGANAN -->
+  <section class="langganan" id="kontak">
+    <div class="wadah">
+      <h2>Jangan Ketinggalan Resep Baru</h2>
+      <p>Masukkan emailmu, kami kirim rekomendasi kuliner tiap minggu.</p>
+      <form class="form-langganan" id="formLangganan">
+        <input type="email" id="email" placeholder="Alamat email kamu" required>
+        <button type="submit">Daftar</button>
+      </form>
+      <div class="pesan-langganan" id="pesanLangganan"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wadah">
+      <div class="footer-grid">
+        <div>
+          <h4>RasaNusantara</h4>
+          <p>Tempat berkumpulnya para pecinta makanan Indonesia. Kenali, cicipi, dan lestarikan warisan kuliner kita.</p>
+        </div>
+        <div>
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="#beranda">Beranda</a></li>
+            <li><a href="#kuliner">Kuliner</a></li>
+            <li><a href="#daerah">Pulau</a></li>
+            <li><a href="#testimoni">Ulasan</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Hubungi Kami</h4>
+          <ul>
+            <li>halo@rasanusantara.id</li>
+            <li>+62 812 3456 7890</li>
+            <li>Indonesia</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bawah">
+        &copy; <span id="tahun"></span> Rasa Nusantara. Dibuat dengan penuh rasa lapar.
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL DETAIL -->
+  <div class="modal" id="modal">
+    <div class="modal-kotak">
+      <button class="tutup-modal" id="tutupModal" aria-label="Tutup">&times;</button>
+      <div class="modal-gambar" id="modalGambar"></div>
+      <div class="modal-isi">
+        <span class="daerah-modal" id="modalDaerah"></span>
+        <h3 id="modalNama"></h3>
+        <p id="modalDeskripsi"></p>
+        <ul class="modal-info" id="modalInfo"></ul>
+      </div>
+    </div>
+  </div>
+
+  <button class="ke-atas" id="keAtas" aria-label="Kembali ke atas">↑</button>
+
+  <script>
+    // ===== DATA MAKANAN =====
+    // "wiki" = kata kunci untuk cari foto otomatis dari Wikipedia.
+    // Kalau mau pakai foto sendiri, tambahkan properti gambar: 'https://link-foto-kamu.jpg'
+    const daftarMakanan = [
+      // ---- SUMATERA ----
+      { nama: 'Rendang', daerah: 'Sumatera', emoji: '🍖', wiki: 'Rendang',
+        deskripsi: 'Daging sapi dimasak berjam-jam dalam santan dan rempah sampai bumbunya mengering. Ikon kuliner Minangkabau.',
+        bahan: 'Daging sapi, santan, cabai, lengkuas', harga: 'Rp 25.000 - 60.000', pedas: 3 },
+      { nama: 'Pempek Palembang', daerah: 'Sumatera', emoji: '🐟', wiki: 'Pempek',
+        deskripsi: 'Olahan ikan dan sagu yang digoreng, disiram kuah cuko yang asam, manis, dan pedas.',
+        bahan: 'Ikan tenggiri, sagu, cuko', harga: 'Rp 20.000 - 45.000', pedas: 2 },
+      { nama: 'Mie Aceh', daerah: 'Sumatera', emoji: '🍝', wiki: 'Mie Aceh',
+        deskripsi: 'Mie tebal berbumbu kari pekat dengan daging, udang, atau kepiting. Pedasnya mantap.',
+        bahan: 'Mie kuning, bumbu kari, seafood', harga: 'Rp 20.000 - 55.000', pedas: 3 },
+      { nama: 'Sate Padang', daerah: 'Sumatera', emoji: '🍢', wiki: 'Sate Padang',
+        deskripsi: 'Sate daging sapi disiram kuah kental kekuningan dari tepung beras dan rempah.',
+        bahan: 'Daging sapi, tepung beras, kunyit', harga: 'Rp 20.000 - 40.000', pedas: 2 },
+      { nama: 'Bika Ambon', daerah: 'Sumatera', emoji: '🍰', wiki: 'Bika Ambon',
+        deskripsi: 'Kue berongga khas Medan dengan tekstur kenyal dan aroma santan yang harum.',
+        bahan: 'Tepung tapioka, santan, telur', harga: 'Rp 30.000 - 90.000', pedas: 0 },
+
+      // ---- JAWA ----
+      { nama: 'Gudeg Jogja', daerah: 'Jawa', emoji: '🥘', wiki: 'Gudeg',
+        deskripsi: 'Nangka muda dimasak lama dengan santan dan gula jawa. Manis legit, dilengkapi telur dan sambal krecek.',
+        bahan: 'Nangka muda, santan, gula jawa', harga: 'Rp 18.000 - 40.000', pedas: 1 },
+      { nama: 'Rawon', daerah: 'Jawa', emoji: '🍜', wiki: 'Rawon',
+        deskripsi: 'Sup daging berkuah hitam pekat dari kluwek khas Jawa Timur, pasangannya tauge dan telur asin.',
+        bahan: 'Daging sapi, kluwek, serai, kunyit', harga: 'Rp 22.000 - 45.000', pedas: 1 },
+      { nama: 'Soto Betawi', daerah: 'Jawa', emoji: '🍲', wiki: 'Soto Betawi',
+        deskripsi: 'Soto berkuah santan dan susu dengan potongan daging sapi, kentang, dan tomat.',
+        bahan: 'Daging sapi, santan, susu, kentang', harga: 'Rp 25.000 - 50.000', pedas: 1 },
+      { nama: 'Gado-Gado', daerah: 'Jawa', emoji: '🥗', wiki: 'Gado-gado',
+        deskripsi: 'Sayur rebus dengan tahu, tempe, lontong, dan telur, disiram saus kacang yang gurih.',
+        bahan: 'Sayuran, tahu, tempe, saus kacang', harga: 'Rp 15.000 - 30.000', pedas: 2 },
+      { nama: 'Nasi Liwet', daerah: 'Jawa', emoji: '🍚', wiki: 'Nasi liwet',
+        deskripsi: 'Nasi gurih yang dimasak dengan santan dan daun salam, disajikan dengan suwiran ayam dan telur.',
+        bahan: 'Beras, santan, ayam, telur', harga: 'Rp 15.000 - 35.000', pedas: 1 },
+
+      // ---- BALI & NUSA TENGGARA ----
+      { nama: 'Ayam Betutu', daerah: 'Bali & Nusa Tenggara', emoji: '🍗', wiki: 'Betutu',
+        deskripsi: 'Ayam utuh berbalut bumbu genep, dipanggang atau dikukus berjam-jam sampai empuk dan harum.',
+        bahan: 'Ayam, bumbu genep, daun singkong', harga: 'Rp 40.000 - 120.000', pedas: 3 },
+      { nama: 'Babi Guling', daerah: 'Bali & Nusa Tenggara', emoji: '🥩', wiki: 'Babi guling',
+        deskripsi: 'Babi panggang berbumbu rempah dengan kulit renyah, hidangan upacara khas Bali (mengandung babi).',
+        bahan: 'Daging babi, bumbu genep, kunyit', harga: 'Rp 35.000 - 90.000', pedas: 2 },
+      { nama: 'Lawar Bali', daerah: 'Bali & Nusa Tenggara', emoji: '🥥', wiki: 'Lawar',
+        deskripsi: 'Campuran sayur, kelapa parut, dan daging cincang dengan bumbu base genep.',
+        bahan: 'Kelapa, sayur, daging cincang', harga: 'Rp 20.000 - 45.000', pedas: 2 },
+      { nama: 'Sate Lilit', daerah: 'Bali & Nusa Tenggara', emoji: '🍢', wiki: 'Sate lilit',
+        deskripsi: 'Daging ikan atau ayam cincang berbumbu, dililitkan pada batang serai lalu dibakar.',
+        bahan: 'Ikan/ayam cincang, kelapa, serai', harga: 'Rp 20.000 - 50.000', pedas: 1 },
+      { nama: 'Ayam Taliwang', daerah: 'Bali & Nusa Tenggara', emoji: '🌶️', wiki: 'Ayam taliwang',
+        deskripsi: 'Ayam bakar khas Lombok dengan bumbu cabai dan terasi yang pedasnya nendang.',
+        bahan: 'Ayam kampung, cabai, terasi', harga: 'Rp 35.000 - 80.000', pedas: 3 },
+
+      // ---- KALIMANTAN ----
+      { nama: 'Soto Banjar', daerah: 'Kalimantan', emoji: '🍲', wiki: 'Soto banjar',
+        deskripsi: 'Soto ayam berkuah bening harum rempah dengan perkedel dan telur rebus khas Banjarmasin.',
+        bahan: 'Ayam, soun, kayu manis, cengkih', harga: 'Rp 15.000 - 35.000', pedas: 1 },
+      { nama: 'Amplang', daerah: 'Kalimantan', emoji: '🍘', wiki: 'Amplang',
+        deskripsi: 'Kerupuk ikan renyah dan gurih, camilan sekaligus oleh-oleh khas Kalimantan.',
+        bahan: 'Ikan tenggiri, tepung tapioka', harga: 'Rp 15.000 - 40.000', pedas: 0 },
+      { nama: 'Ketupat Kandangan', daerah: 'Kalimantan', emoji: '🍚', wiki: 'Ketupat Kandangan',
+        deskripsi: 'Ketupat dengan kuah santan kuning dan ikan haruan bakar, sarapan khas Kalimantan Selatan.',
+        bahan: 'Ketupat, ikan haruan, santan', harga: 'Rp 15.000 - 35.000', pedas: 1 },
+      { nama: 'Bubur Pedas Sambas', daerah: 'Kalimantan', emoji: '🥣', wiki: 'Bubur pedas',
+        deskripsi: 'Bubur nasi dengan aneka sayur dan rempah, dimakan bersama teri dan kacang goreng.',
+        bahan: 'Beras, sayuran, rempah, kelapa sangrai', harga: 'Rp 12.000 - 30.000', pedas: 2 },
+      { nama: 'Lempok Durian', daerah: 'Kalimantan', emoji: '🍬', wiki: 'Lempok durian',
+        deskripsi: 'Dodol durian pekat dan manis, oleh-oleh yang awet dan wangi.',
+        bahan: 'Daging durian, gula', harga: 'Rp 20.000 - 60.000', pedas: 0 },
+
+      // ---- SULAWESI ----
+      { nama: 'Coto Makassar', daerah: 'Sulawesi', emoji: '🍵', wiki: 'Coto Makassar',
+        deskripsi: 'Sup daging dan jeroan berkuah kental dari kacang tanah dan rempah, pasangannya ketupat.',
+        bahan: 'Daging sapi, jeroan, kacang tanah', harga: 'Rp 25.000 - 45.000', pedas: 2 },
+      { nama: 'Konro', daerah: 'Sulawesi', emoji: '🍖', wiki: 'Konro',
+        deskripsi: 'Iga sapi dengan kuah hitam dari kluwek, disajikan berkuah atau dibakar.',
+        bahan: 'Iga sapi, kluwek, rempah', harga: 'Rp 45.000 - 100.000', pedas: 1 },
+      { nama: 'Tinutuan', daerah: 'Sulawesi', emoji: '🥣', wiki: 'Tinutuan',
+        deskripsi: 'Bubur Manado dengan labu, jagung, dan aneka sayur, dimakan dengan ikan asin dan sambal.',
+        bahan: 'Beras, labu, jagung, kangkung', harga: 'Rp 15.000 - 30.000', pedas: 1 },
+      { nama: 'Pisang Epe', daerah: 'Sulawesi', emoji: '🍌', wiki: 'Pisang epe',
+        commons: ['pisang epe', 'pisang epe makassar', 'pisang epe pantai losari'],
+        deskripsi: 'Pisang bakar yang dipipihkan, disiram saus gula merah. Jajanan pantai khas Makassar.',
+        bahan: 'Pisang, gula merah, durian', harga: 'Rp 10.000 - 25.000', pedas: 0 },
+      { nama: 'Kapurung', daerah: 'Sulawesi', emoji: '🥘', wiki: 'Kapurung',
+        deskripsi: 'Olahan sagu berkuah ikan dan sayuran dengan rasa asam segar khas Palopo.',
+        bahan: 'Sagu, ikan, sayuran, jeruk nipis', harga: 'Rp 20.000 - 40.000', pedas: 1 },
+
+      // ---- MALUKU & PAPUA ----
+      { nama: 'Papeda', daerah: 'Maluku & Papua', emoji: '🥣', wiki: 'Papeda',
+        deskripsi: 'Bubur sagu kenyal yang disantap dengan ikan kuah kuning. Makanan pokok masyarakat timur.',
+        bahan: 'Sagu, air', harga: 'Rp 15.000 - 35.000', pedas: 0 },
+      { nama: 'Ikan Kuah Kuning', daerah: 'Maluku & Papua', emoji: '🐟', wiki: 'Ikan kuah kuning',
+        commons: ['ikan kuah kuning', 'kuah kuning', 'papeda kuah kuning'],
+        deskripsi: 'Ikan segar dalam kuah kunyit yang asam dan gurih, pasangan wajib papeda.',
+        bahan: 'Ikan tongkol, kunyit, jeruk nipis', harga: 'Rp 25.000 - 60.000', pedas: 1 },
+      { nama: 'Kue Bagea', daerah: 'Maluku & Papua', emoji: '🍪', wiki: 'Bagea',
+        deskripsi: 'Kue kering dari sagu dan kenari yang renyah dan gurih, cocok dicelup teh hangat.',
+        bahan: 'Sagu, kenari, gula', harga: 'Rp 20.000 - 50.000', pedas: 0 },
+      { nama: 'Sagu Lempeng', daerah: 'Maluku & Papua', emoji: '🥞', wiki: 'Sagu lempeng',
+        deskripsi: 'Sagu yang dicetak dan dipanggang jadi lempengan keras, biasa dicelup kuah atau teh.',
+        bahan: 'Tepung sagu', harga: 'Rp 10.000 - 25.000', pedas: 0 },
+      { nama: 'Kohu-Kohu', daerah: 'Maluku & Papua', emoji: '🥗', wiki: 'Kohu-kohu',
+        deskripsi: 'Salad ikan cakalang dengan kelapa parut, kemangi, dan perasan jeruk nipis.',
+        bahan: 'Ikan cakalang, kelapa, kemangi', harga: 'Rp 20.000 - 40.000', pedas: 2 }
+    ];
+
+    // ===== AMBIL FOTO =====
+    // Foto diambil dari Wikipedia (foto asli, lisensi bebas). Hasilnya disimpan sementara
+    // di sessionStorage supaya tidak minta ulang terus.
+    const fotoCache = {};
+    try {
+      Object.assign(fotoCache, JSON.parse(sessionStorage.getItem('foto-kuliner-v2')) || {});
+    } catch (e) { /* abaikan */ }
+
+    // Urutan pencarian: Wikipedia Indonesia -> Wikipedia Inggris -> Wikimedia Commons.
+    // Semuanya hanya mengambil file foto (jpg/png), bukan logo atau peta.
+    const bukanFoto = /\.(svg|gif|tif|tiff|webp)|flag|map|logo|icon|symbol|coat_of_arms/i;
+
+    async function dariHalamanWiki(bahasa, kataKunci) {
+      const url = 'https://' + bahasa + '.wikipedia.org/w/api.php?action=query&format=json&origin=*' +
+        '&generator=search&gsrsearch=' + encodeURIComponent(kataKunci) + '&gsrlimit=5' +
+        '&prop=pageimages&piprop=thumbnail&pithumbsize=900';
+      const data = await (await fetch(url)).json();
+      if (!data.query) return null;
+      const hasil = Object.values(data.query.pages)
+        .sort((a, b) => a.index - b.index)
+        .find(h => h.thumbnail && !bukanFoto.test(h.thumbnail.source));
+      return hasil ? hasil.thumbnail.source : null;
+    }
+
+    async function dariCommons(kataKunci) {
+      const url = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*' +
+        '&generator=search&gsrnamespace=6&gsrlimit=8&gsrsearch=' + encodeURIComponent(kataKunci + ' food') +
+        '&prop=imageinfo&iiprop=url|mime&iiurlwidth=900';
+      const data = await (await fetch(url)).json();
+      if (!data.query) return null;
+      const hasil = Object.values(data.query.pages)
+        .sort((a, b) => a.index - b.index)
+        .find(h => h.imageinfo && /image\/jpeg/.test(h.imageinfo[0].mime) && !bukanFoto.test(h.title));
+      return hasil ? hasil.imageinfo[0].thumburl : null;
+    }
+
+    // Pencarian ketat di Commons: judul file harus memuat semua kata kunci,
+    // jadi foto yang tidak nyambung (misal pisang biasa) tidak ikut terambil.
+    async function dariCommonsTepat(kataKunci) {
+      const url = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*' +
+        '&generator=search&gsrnamespace=6&gsrlimit=15&gsrsearch=' + encodeURIComponent(kataKunci) +
+        '&prop=imageinfo&iiprop=url|mime&iiurlwidth=900';
+      const data = await (await fetch(url)).json();
+      if (!data.query) return null;
+      const kata = kataKunci.toLowerCase().split(' ');
+      const hasil = Object.values(data.query.pages)
+        .sort((a, b) => a.index - b.index)
+        .find(h => h.imageinfo && /image\/jpeg/.test(h.imageinfo[0].mime) &&
+          kata.every(k => h.title.toLowerCase().includes(k)));
+      return hasil ? hasil.imageinfo[0].thumburl : null;
+    }
+
+    async function cariFoto(item) {
+      if (item.gambar) return item.gambar;
+      if (fotoCache[item.nama]) return fotoCache[item.nama];
+
+      const kata = item.wiki || item.nama;
+      // kalau makanan punya daftar "commons", pakai itu saja (lebih akurat)
+      const sumber = item.commons
+        ? item.commons.map(q => () => dariCommonsTepat(q))
+        : [
+            () => dariHalamanWiki('id', kata),
+            () => dariHalamanWiki('en', kata),
+            () => dariCommons(kata)
+          ];
+
+      for (const coba of sumber) {
+        try {
+          const src = await coba();
+          if (src) {
+            fotoCache[item.nama] = src;
+            try { sessionStorage.setItem('foto-kuliner-v2',JSON.stringify(fotoCache)); } catch (e) {}
+            return src;
+          }
+        } catch (e) { /* sumber ini gagal, lanjut ke berikutnya */ }
+      }
+      return null;
+    }
+
+    function isiFoto(el, item) {
+      if (!el) return;
+      // selama foto dimuat tampil kotak abu-abu berkilau, bukan emoji
+      el.innerHTML = '<div class="gambar-cadangan"><span>' + item.nama + '</span></div>';
+      cariFoto(item).then(src => {
+        if (!src) { el.firstChild.classList.add('selesai'); return; }
+        const img = new Image();
+        img.alt = item.nama;
+        img.onload = () => { el.innerHTML = ''; el.appendChild(img); };
+        img.onerror = () => el.firstChild.classList.add('selesai');
+        img.src = src;
+      });
+    }
+
+    // ===== ELEMEN =====
+    const grid = document.getElementById('gridMakanan');
+    const filterBox = document.getElementById('filter');
+    const inputCari = document.getElementById('cari');
+    const pesanKosong = document.getElementById('kosong');
+    const modal = document.getElementById('modal');
+
+    let kategoriAktif = 'Semua';
+    let kataKunci = '';
+
+    // simpan favorit di localStorage
+    let favorit = [];
+    try {
+      favorit = JSON.parse(localStorage.getItem('favorit-kuliner')) || [];
+    } catch (e) {
+      favorit = [];
+    }
+
+    function simpanFavorit() {
+      try {
+        localStorage.setItem('favorit-kuliner', JSON.stringify(favorit));
+      } catch (e) { /* abaikan kalau storage diblokir */ }
+    }
+
+    // ===== BUAT FILTER =====
+    function buatFilter() {
+      const daftar = ['Semua', ...new Set(daftarMakanan.map(m => m.daerah)), 'Favorit ❤️'];
+      filterBox.innerHTML = daftar.map(d =>
+        `<button class="chip ${d === kategoriAktif ? 'aktif' : ''}" data-kategori="${d}">${d}</button>`
+      ).join('');
+    }
+
+    filterBox.addEventListener('click', e => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      kategoriAktif = chip.dataset.kategori;
+      buatFilter();
+      tampilkanMakanan();
+    });
+
+    inputCari.addEventListener('input', e => {
+      kataKunci = e.target.value.toLowerCase().trim();
+      tampilkanMakanan();
+    });
+
+    // ===== TAMPILKAN KARTU =====
+    function tampilkanMakanan() {
+      const hasil = daftarMakanan.filter(m => {
+        const cocokKategori =
+          kategoriAktif === 'Semua' ||
+          (kategoriAktif === 'Favorit ❤️' ? favorit.includes(m.nama) : m.daerah === kategoriAktif);
+        const cocokCari =
+          m.nama.toLowerCase().includes(kataKunci) ||
+          m.bahan.toLowerCase().includes(kataKunci);
+        return cocokKategori && cocokCari;
+      });
+
+      grid.innerHTML = hasil.map(m => {
+        const suka = favorit.includes(m.nama);
+        return `
+          <article class="kartu" data-nama="${m.nama}">
+            <div class="kartu-gambar">
+              <div class="foto"></div>
+              <span class="label-daerah">${m.daerah}</span>
+              <button class="tombol-suka" data-suka="${m.nama}" aria-label="Favorit">${suka ? '❤️' : '🤍'}</button>
+            </div>
+            <div class="kartu-isi">
+              <h3>${m.nama}</h3>
+              <p>${m.deskripsi.slice(0, 85)}...</p>
+              <div class="kartu-bawah">
+                <span class="harga">${m.harga.split(' - ')[0]}+</span>
+                <span class="pedas">${m.pedas ? '🌶️'.repeat(m.pedas) : 'Tidak pedas'}</span>
+              </div>
+            </div>
+          </article>`;
+      }).join('');
+
+      pesanKosong.style.display = hasil.length ? 'none' : 'block';
+
+      grid.querySelectorAll('.kartu').forEach(k => {
+        const item = daftarMakanan.find(x => x.nama === k.dataset.nama);
+        isiFoto(k.querySelector('.foto'), item);
+      });
+    }
+
+    // klik kartu / klik hati
+    grid.addEventListener('click', e => {
+      const hati = e.target.closest('.tombol-suka');
+      if (hati) {
+        e.stopPropagation();
+        const nama = hati.dataset.suka;
+        if (favorit.includes(nama)) {
+          favorit = favorit.filter(f => f !== nama);
+          hati.textContent = '🤍';
+        } else {
+          favorit.push(nama);
+          hati.textContent = '❤️';
+          hati.classList.add('suka');
+          setTimeout(() => hati.classList.remove('suka'), 400);
+        }
+        simpanFavorit();
+        if (kategoriAktif === 'Favorit ❤️') tampilkanMakanan();
+        return;
+      }
+
+      const kartu = e.target.closest('.kartu');
+      if (kartu) bukaModal(kartu.dataset.nama);
+    });
+
+    // ===== MODAL =====
+    function bukaModal(nama) {
+      const m = daftarMakanan.find(x => x.nama === nama);
+      if (!m) return;
+
+      document.getElementById('modalGambar').innerHTML = '<div class="foto"></div>';
+      isiFoto(document.querySelector('#modalGambar .foto'), m);
+      document.getElementById('modalDaerah').textContent = m.daerah;
+      document.getElementById('modalNama').textContent = m.nama;
+      document.getElementById('modalDeskripsi').textContent = m.deskripsi;
+      document.getElementById('modalInfo').innerHTML = `
+        <li><span>Bahan utama</span><span>${m.bahan}</span></li>
+        <li><span>Kisaran harga</span><span>${m.harga}</span></li>
+        <li><span>Tingkat pedas</span><span>${m.pedas ? '🌶️'.repeat(m.pedas) : 'Tidak pedas'}</span></li>
+      `;
+
+      modal.classList.add('tampil');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function tutupModal() {
+      modal.classList.remove('tampil');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('tutupModal').addEventListener('click', tutupModal);
+    modal.addEventListener('click', e => { if (e.target === modal) tutupModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') tutupModal(); });
+
+    // ===== NAVBAR & MENU MOBILE =====
+    const navbar = document.getElementById('navbar');
+    const burger = document.getElementById('burger');
+    const menuNav = document.getElementById('menuNav');
+    const keAtas = document.getElementById('keAtas');
+
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+      keAtas.classList.toggle('tampil', window.scrollY > 500);
+    });
+
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('buka');
+      menuNav.classList.toggle('buka');
+    });
+
+    menuNav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        burger.classList.remove('buka');
+        menuNav.classList.remove('buka');
+      });
+    });
+
+    keAtas.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // ===== ANIMASI SCROLL =====
+    const pengamat = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('terlihat');
+          pengamat.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    function pasangAnimasi() {
+      document.querySelectorAll('.muncul').forEach(el => pengamat.observe(el));
+    }
+
+    // ===== HITUNG ANGKA STATISTIK =====
+    const hitungan = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = +el.dataset.target;
+        const durasi = 1500;
+        const mulai = performance.now();
+
+        function jalan(waktu) {
+          const progres = Math.min((waktu - mulai) / durasi, 1);
+          el.textContent = Math.floor(progres * target).toLocaleString('id-ID');
+          if (progres < 1) requestAnimationFrame(jalan);
+          else el.textContent = target.toLocaleString('id-ID') + (target === 5300 ? '+' : '');
+        }
+        requestAnimationFrame(jalan);
+        hitungan.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+
+    document.querySelectorAll('[data-target]').forEach(el => hitungan.observe(el));
+
+    // ===== FORM LANGGANAN =====
+    document.getElementById('formLangganan').addEventListener('submit', e => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      document.getElementById('pesanLangganan').textContent =
+        `Terima kasih! Rekomendasi kuliner akan dikirim ke ${email} 🍽️`;
+      e.target.reset();
+    });
+
+    // klik kotak pulau -> langsung filter menu
+    document.querySelectorAll('[data-pulau]').forEach(kotak => {
+      kotak.addEventListener('click', () => {
+        kategoriAktif = kotak.dataset.pulau;
+        buatFilter();
+        tampilkanMakanan();
+        document.getElementById('kuliner').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // ===== JALANKAN =====
+    document.getElementById('tahun').textContent = new Date().getFullYear();
+    buatFilter();
+    tampilkanMakanan();
+    pasangAnimasi();
+  </script>
+</body>
+</html>
